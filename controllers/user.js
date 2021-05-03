@@ -24,10 +24,15 @@ const usuariosPOST = async(req = request, res = response) => {
     const salt = bcrypt.genSaltSync();
     usuario.password = bcrypt.hashSync(password, salt);
     const existeEmail = await Usuario.findOne({ correo });
-
+    const existeRol = await Usuario.findOne({ rol });
     if (existeEmail) {
         return res.status(400).json({
             msg: 'Usuario ya existe'
+        });
+    };
+    if (rol != existeRol) {
+        return res.status(400).json({
+            msg: 'Rol no permitido'
         });
     };
     //usuario.save();
